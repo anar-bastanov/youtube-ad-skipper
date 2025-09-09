@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="open_accessibility_settings"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:shortcutShortLabel="@string/open_accessibility_settings_shortcut_short"
+        android:shortcutLongLabel="@string/open_accessibility_settings_shortcut_long"
+        android:shortcutDisabledMessage="@string/shortcut_disabled_message">
+
+        <intent
+            android:action="com.anar.adskipper.OPEN_SETTINGS_SHORTCUT"
+            android:targetPackage="com.anar.adskipper"
+            android:targetClass="com.anar.adskipper.MainActivity" />
+
+        <categories android:name="android.shortcut.conversation" />
+
+    </shortcut>
+</shortcuts>

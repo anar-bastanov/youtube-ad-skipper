@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Ad Skipper</string>
+    <string name="app_description">
+        Finds the Skip Ad button on YouTube videos on screen and automatically clicks.
+    </string>
+    <string name="permission_needed_title">Enable Accessibility Service</string>
+    <string name="permission_needed_message">
+        To be able to perform button press actions for you, enable the
+        service from the settings. You can turn it off anytime in Settings.
+    </string>
+    <string name="open_settings">Open Settings</string>
+    <string name="service_already_running">Service already running</string>
+    <string name="service_enabled_thanks">Service enabled — you’re all set!</string>
+
+    <string name="open_accessibility_settings_shortcut_short">Settings</string>
+    <string name="open_accessibility_settings_shortcut_long">Open Ad Skipper Settings</string>
+    <string name="shortcut_disabled_message">The Ad Skipper service is not available.</string>
+</resources>
