@@ -3,7 +3,7 @@
     <shortcut
         android:shortcutId="open_accessibility_settings"
         android:enabled="true"
-        android:icon="@android:drawable/ic_menu_manage"
+        android:icon="@drawable/baseline_accessibility_new_24"
         android:shortcutShortLabel="@string/open_accessibility_settings_shortcut_short"
         android:shortcutLongLabel="@string/open_accessibility_settings_shortcut_long"
         android:shortcutDisabledMessage="@string/shortcut_disabled_message">
