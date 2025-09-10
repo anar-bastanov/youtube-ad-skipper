@@ -5,7 +5,7 @@
     android:accessibilityEventTypes="typeWindowContentChanged"
     android:packageNames="com.google.android.youtube"
     android:accessibilityFeedbackType="feedbackGeneric"
-    android:notificationTimeout="120"
+    android:notificationTimeout="250"
     android:canRetrieveWindowContent="true"
     android:canRequestTouchExplorationMode="false"
     android:canRequestFilterKeyEvents="false"

@@ -5,19 +5,23 @@ import android.accessibilityservice.AccessibilityServiceInfo
 import android.accessibilityservice.GestureDescription
 import android.graphics.Path
 import android.graphics.Rect
-import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 
 class ClickerAccessibilityService : AccessibilityService() {
 
-    companion object { private const val TAG = "AdSkipper" }
-
     private val targetPackage = "com.google.android.youtube"
 
-    private val targetViewIds = arrayOf(
-        "$targetPackage:id/skip_ad_button"
-    )
+    private val targetViewId = "$targetPackage:id/skip_ad_button"
+
+    private var lastScanAt = 0L
+    private val scanCooldownMs = 200L
+    private var lastClickAt = 0L
+    private val clickDebounceMs = 3000L
+
+//    private val targetViewIds = arrayOf(
+//        "$targetPackage:id/skip_ad_button"
+//    )
 
 //    private val targetTexts = arrayOf(
 //        "Dismiss",
@@ -38,7 +42,7 @@ class ClickerAccessibilityService : AccessibilityService() {
         serviceInfo = AccessibilityServiceInfo().apply {
             eventTypes = AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
             feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
-            notificationTimeout = 120
+            notificationTimeout = 250
             flags = AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS
             packageNames = arrayOf(targetPackage)
         }
@@ -50,21 +54,36 @@ class ClickerAccessibilityService : AccessibilityService() {
         val types = event.contentChangeTypes
         if (types != 0 &&
             (types and (AccessibilityEvent.CONTENT_CHANGE_TYPE_SUBTREE
-                    or AccessibilityEvent.CONTENT_CHANGE_TYPE_TEXT
-                    or AccessibilityEvent.CONTENT_CHANGE_TYPE_CONTENT_DESCRIPTION)) == 0) {
+//                    or AccessibilityEvent.CONTENT_CHANGE_TYPE_TEXT
+//                    or AccessibilityEvent.CONTENT_CHANGE_TYPE_CONTENT_DESCRIPTION
+            )) == 0) {
             return
         }
 
-        val root: AccessibilityNodeInfo = event.source ?: rootInActiveWindow ?: return
+//        val root: AccessibilityNodeInfo = event.source ?: rootInActiveWindow ?: return
 
-        for (id in targetViewIds) {
-            val nodes = try { root.findAccessibilityNodeInfosByViewId(id) ?: emptyList() }
-            catch (_: RuntimeException) { emptyList() }
+        val now = android.os.SystemClock.uptimeMillis()
+        if (now - lastClickAt < clickDebounceMs) return
+        if (now - lastScanAt < scanCooldownMs) return
+        lastScanAt = now
 
-            for (n in nodes) {
-                if (clickNodeOrParent(n)) return
+        val root = rootInActiveWindow ?: return
+        try {
+            val nodes = root.findAccessibilityNodeInfosByViewId(targetViewId)
+            if (!nodes.isNullOrEmpty() && clickNodeOrParent(nodes[0])) {
+                lastClickAt = now
             }
         }
+        catch (_: RuntimeException) {}
+
+//        for (id in targetViewIds) {
+//            val nodes = try { root.findAccessibilityNodeInfosByViewId(id) ?: emptyList() }
+//            catch (_: RuntimeException) { emptyList() }
+//
+//            for (n in nodes) {
+//                if (clickNodeOrParent(n)) return
+//            }
+//        }
 
 //        for (t in targetTexts) {
 //            val nodes = root.findAccessibilityNodeInfosByText(t) ?: emptyList()
@@ -81,8 +100,6 @@ class ClickerAccessibilityService : AccessibilityService() {
 //                if (TextUtils.equals(n.contentDescription, d) && clickNodeOrParent(n)) return
 //            }
 //        }
-
-//        dumpTreeBrief(rootInActiveWindow)
     }
 
     override fun onInterrupt() {}
@@ -111,30 +128,5 @@ class ClickerAccessibilityService : AccessibilityService() {
         }
 
         return false
-    }
-
-    private fun dumpTreeBrief(root: AccessibilityNodeInfo, maxNodes: Int = 60) {
-        var count = 0
-
-        fun walk(n: AccessibilityNodeInfo?, depth: Int) {
-            if (n == null || count >= maxNodes) return
-
-            val id = n.viewIdResourceName ?: "-"
-            val txt = n.text?.toString()?.take(40) ?: ""
-            val cd = n.contentDescription?.toString()?.take(40) ?: ""
-
-            Log.d(TAG, "${" ".repeat(depth*2)}• cls=${n.className} id=$id txt='$txt' cDesc='$cd' clickable=${n.isClickable} enabled=${n.isEnabled} visible=${n.isVisibleToUser}")
-            count++
-            var i = 0
-            val c = n.childCount
-
-            while (i < c) {
-                walk(n.getChild(i), depth + 1)
-                i++
-            }
-        }
-
-        Log.d(TAG, "---- snapshot ----")
-        walk(root, 0)
     }
 }
