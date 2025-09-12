@@ -17,7 +17,7 @@ Ad Skipper is a lightweight helper for **YouTube**. When a skippable ad appears,
 
 ## Installation
 
-1. **Download** the latest APK from [GitHub Releases](https://github.com/anar-bastanov/youtube-ad-skipper/releases/latest), or build the app with Android Studio.
+1. **Download** the latest APK from [GitHub Releases](https://github.com/anar-bastanov/ad-skipper-android/releases/latest), or build the app with Android Studio.
 
 2. **Install** the APK on your device, and enable **Install unknown apps** if prompted.
 
@@ -38,7 +38,7 @@ Ad Skipper is **open source**, so you can inspect the code yourself. The app run
 >
 > Because Ad Skipper uses this system permission to detect and press the Skip Ad button, **Play Protect** may show a warning such as "This app may be harmful". This is a generic warning shown to any app with this type of permission.
 >
-> If Play Protect blocks installation, you can safely choose **Install anyway** once you have verified you downloaded it from the official [GitHub Releases](https://github.com/anar-bastanov/youtube-ad-skipper/releases/latest).
+> If Play Protect blocks installation, you can safely choose **Install anyway** once you have verified you downloaded it from the official [GitHub Releases](https://github.com/ad-skipper-android/youtube-ad-skipper/releases/latest).
 >
 > In rare cases Play Protect may continue to **block or remove** the app. You can temporarily **pause Play Protect scanning** in the Play Store (`Profile > Play Protect > Settings`), complete installation, and then **re-enable Play Protect** immediately afterwards.
 
